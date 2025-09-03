@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Twitch Followed Channels Enhancer (Robust Expansion & Visibility)
 // @namespace    http://tampermonkey.net/
-// @version      1.0 
+// @version      1.0
 // @description  Enhances the Twitch followed channels list
 // @author       You
 // @match        https://www.twitch.tv/*
@@ -188,6 +188,21 @@
         }
     }
 
+    // --- Open Stories Repositioning ---
+    const moveOpenStoriesToTop = () => {
+        const storiesSelector = '.storiesLeftNavSection--csO9S';
+        const storiesSection = document.querySelector(storiesSelector);
+
+        if (storiesSection) {
+            const parentContainer = storiesSection.parentNode;
+            if (parentContainer && parentContainer.firstChild !== storiesSection) {
+                parentContainer.insertBefore(storiesSection, parentContainer.firstChild);
+                console.log("Moved 'Open Stories' to the top of the sidebar.");
+            }
+        }
+    };
+    // --- End Open Stories Repositioning ---
+
     // --- Cog Icon Repositioning Logic: After "For You" text ---
     function addStyle(css) {
         const style = document.createElement('style');
@@ -287,6 +302,7 @@
                 // Attempt to place the cog icon next to "For You"
                 // We'll call this repeatedly as the "For You" section might load dynamically
                 placeCogIconAfterForYou();
+                moveOpenStoriesToTop();
             }
         }
     });
@@ -297,5 +313,6 @@
     // Initial checks in case the elements are already present on page load
     processFollowedChannels();
     placeCogIconAfterForYou();
+    moveOpenStoriesToTop();
 
 })();
